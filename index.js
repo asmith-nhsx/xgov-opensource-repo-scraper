@@ -5,6 +5,9 @@ import Octokat from "octokat";
 import Promise from "bluebird";
 import { writeFileSync } from "fs";
 
+//const config = "https://raw.githubusercontent.com/github/government.github.com/gh-pages/_data/governments.yml"
+const config = "https://raw.githubusercontent.com/asmith-nhsx/xgov-opensource-repo-scraper/master/example.yml"
+
 const octo = new Octokat({
   token: process.env.GITHUB_TOKEN,
 });
@@ -20,7 +23,8 @@ const formatResult = (result) => {
     // watchersCount: result.watchersCount, // github api appears to be returning the same as the stargazersCount?!
     language: result.language,
     forksCount: result.forksCount,
-    openIssuesCount: result.openIssuesCount,
+    openIssuesCount: result.openIssuesCount//,
+    //readMe: result.readme
   };
 };
 
@@ -29,13 +33,18 @@ const fetchAll = async (org, args) => {
   let aggregate = [response];
 
   console.log(`fetched page 1 for ${org}`);
+  //console.log(response.name);
+  //console.log(response.readme);
   let i = 1;
-  await Promise.delay(50); //slow down to appease github rate limiting
+  await Promise.delay(200); //slow down to appease github rate limiting
   while (response.nextPage) {
     i++;
     response = await response.nextPage();
     console.log(`fetched page ${i} for ${org}`);
-    await Promise.delay(50); //slow down to appease github rate limiting
+    //console.log(response[0].name);
+    //console.log(response[0].readme);
+    //console.log(response);
+    await Promise.delay(200); //slow down to appease github rate limiting
     aggregate.push(response);
   }
   return aggregate;
@@ -44,7 +53,7 @@ const fetchAll = async (org, args) => {
 const allDepartments = yaml.safeLoad(
   await (
     await fetch(
-      "https://raw.githubusercontent.com/github/government.github.com/gh-pages/_data/governments.yml"
+      config
     )
   ).text()
 );
