@@ -1,10 +1,12 @@
 name: Publisher
 
 on:
-  push:
-  schedule:
-  - cron: 0 2 * * *
-
+  #push:
+  #schedule:
+  #- cron: 0 2 * * *
+  
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
 jobs:
   run:
     permissions:
