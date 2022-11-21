@@ -12,7 +12,9 @@ const octo = new Octokat({
   token: process.env.GITHUB_TOKEN,
 });
 
-const formatResult = (result) => {
+const formatResult = async (result) => {
+  let readme = await result.readme.fetch();
+  console.log(readme);
   return {
     owner: result.owner.login,
     name: result.name,
